@@ -13,22 +13,29 @@ from requests.auth import HTTPBasicAuth
 # e.g., response = requests.post(url, params=kwargs, json=payload)
 
 cf = {
-    "URL":"https://eu-de.functions.appdomain.cloud/api/v1/web/ba16a567-bf8b-4e08-8345-2742a032caf3/dealership-package/get-dealership",
+    "URL":"https://eu-de.functions.appdomain.cloud/api/v1/web/ba16a567-bf8b-4e08-8345-2742a032caf3",
     "API_KEY":"z5e8crJchrTM27tZiF0NuoJUUw8mLV9n02etE4DCk4jN",
 }
 
 # Create a get_dealers_from_cf method to get dealers from a cloud function
-def get_dealers_from_cf(**kwargs):
-    response = requests.get(cf["URL"], headers={'Content-Type': 'application/json'},
+def get_dealers_from_cf(params={},**kwargs):
+    response = requests.get(cf["URL"]+"/dealership-package/get-dealership", params=params, headers={'Content-Type': 'application/json'},
                                  auth=HTTPBasicAuth('apikey', cf["API_KEY"]))
     return {"result": response.json()}
 # - Parse JSON results into a CarDealer object list
 
 
 # Create a get_dealer_reviews_from_cf method to get reviews by dealer id from a cloud function
-# def get_dealer_by_id_from_cf(url, dealerId):
+def get_dealer_by_id_from_cf(dealerId, params={}):
+    response = requests.get(cf["URL"]+"/djangoapp/get-reviews", params={"dealership":dealerId}, headers={'Content-Type': 'application/json'},
+                                 auth=HTTPBasicAuth('apikey', cf["API_KEY"]))
+    return {"result": response.json()}
 # - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
+
+def post_review(payload, kwargs):
+    response = requests.post(cf["URL"]+"/djangoapp/get-reviews", params=kwargs, json={'review': payload})
+    return {"result": response.json()}
 
 
 # Create an `analyze_review_sentiments` method to call Watson NLU and analyze text

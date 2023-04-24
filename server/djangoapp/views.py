@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 # from .models import related models
-from .restapis import get_dealers_from_cf
+from .restapis import get_dealers_from_cf, get_dealer_by_id_from_cf, post_review
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -82,8 +82,27 @@ def get_dealerships(request):
 
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
-# def get_dealer_details(request, dealer_id):
-# ...
+def get_dealer_details(request):
+    if request.method == "GET":
+        print(request.GET['dealerId'])
+        dealerId = request.GET['dealerId']
+        context = get_dealer_by_id_from_cf(dealerId=int(dealerId))
+        print(context)
+        return render(request, 'djangoapp/dealer_details.html', context)
+    elif request.method == "POST":
+        post_review({
+            'dealership': int(request.POST['dealership']),
+            'id': int(request.POST['id']),
+            "name": "Upkar Lidder",
+            "review": "Great service!",
+            "purchase": false,
+            "another": "field",
+            "purchase_date": "02/16/2021",
+            "car_make": "Audi",
+            "car_model": "Car",
+            "car_year": 2021
+        })
+        return render(request, 'djangoapp/dealer_details.html', context)
 
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
