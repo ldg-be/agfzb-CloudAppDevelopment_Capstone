@@ -142,15 +142,12 @@ def get_dealer_by_id_from_cf(url, dealerId):
     return results
     
 
-def post_review(payload, kwargs):
-    response = requests.post(cf["URL"]+"/djangoapp/get-reviews", params=kwargs, json={'review': payload})
-    return {"result": response.json()}
+def post_review(url, payload, **kwargs):
+    response = requests.post(url, params=kwargs, json={'review': payload})
+    print(response)
+    return {"result": response}
 
 
-# Create an `analyze_review_sentiments` method to call Watson NLU and analyze text
-# def analyze_review_sentiments(text):
-# - Call get_request() with specified arguments
-# - Get the returned sentiment label such as Positive or Negative
 
 
 

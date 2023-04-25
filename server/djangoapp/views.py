@@ -115,6 +115,34 @@ def get_dealer_details(request, dealer_id):
         return render(request, 'djangoapp/dealer_details.html', context)
 
 # Create a `add_review` view to submit a review
-# def add_review(request, dealer_id):
-# ...
+def add_review(request, dealer_id):
+    context = {'dealer_id': dealer_id}
+    #check if authenticated
+    user = request.user
+    print(user)
+    if not user.is_authenticated:
+        print("user is not authenticated")
+        return render(request, 'djangoapp/index.html', context)
+    
+    if request.method == "GET":
+        return render(request, 'djangoapp/add_review.html', context)
+    
+    elif request.method == 'POST':
+        url = "https://eu-de.functions.appdomain.cloud/api/v1/web/ba16a567-bf8b-4e08-8345-2742a032caf3/djangoapp/get-reviews"
+        review = {
+            'dealership': dealer_id,
+            "name": str(user),
+            "review": request.POST["review"],
+            "another": "field",
+            "purchase_date": "02/16/2021",
+            "car_make": "Audi",
+            "car_model": "Car",
+            "car_year": 2021
+        }
+        review["time"] = datetime.utcnow().isoformat()
+        #review["review"] = "This is a great car dealer"
+        print(review)
+        message = post_review(url, review)
+        return render(request, 'djangoapp/index.html', context)
+
 

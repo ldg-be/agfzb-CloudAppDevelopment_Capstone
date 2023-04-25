@@ -12,5 +12,22 @@
 </head>
     <body>
     <!--Add review form here -->
+    <form action="{% url 'djangoapp:add_review' dealer_id %}" method="post">
+        <div class="container"> <!--Style root div with .container class -->
+            {% csrf_token %}
+            <h1>Please edit your review</h1>
+            <hr>
+            <div class="form-group"> 
+                <label for="review"><b>Review</b></label>
+                <input type="text" class="form-control" placeholder="Review: " name="review" required> <!--Style input with .form-control class -->
+                {% if message %}
+                <div class="alert alert-warning"> <!--Style the message paragraph with .alert and .alert-warning class -->
+                    {{ message }}
+                </div>
+                {% endif %}
+                <button class="btn btn-primary" type="submit">Submit</button> <!--Style button with .btn and .btn-primary class -->
+            </div>
+        </div>
+    </form>
     </body>
 </html>
