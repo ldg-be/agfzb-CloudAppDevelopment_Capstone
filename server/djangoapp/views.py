@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 # from .models import related models
-from .restapis import get_dealers_from_cf, get_dealer_by_id_from_cf, post_review
+from .restapis import get_dealers_from_cf, get_dealer_by_id_from_cf, post_review, get_dealer_reviews_from_cf
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -75,20 +75,30 @@ def registration_request(request):
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
-    context = get_dealers_from_cf()
-    print(context)
+    #context = get_dealers_from_cf()
+    #print(context)
     if request.method == "GET":
-        return render(request, 'djangoapp/index.html', context)
+        url = "https://eu-de.functions.appdomain.cloud/api/v1/web/ba16a567-bf8b-4e08-8345-2742a032caf3/dealership-package/get-dealership"
+        # Get dealers from the URL
+        dealerships = get_dealers_from_cf(url)
+        # Concat all dealer's short name
+        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+        # Return a list of dealer short name
+        return HttpResponse(dealer_names)
+        #return render(request, 'djangoapp/index.html', context)
 
 
 # Create a `get_dealer_details` view to render the reviews of a dealer
-def get_dealer_details(request):
+def get_dealer_details(request, dealer_id):
     if request.method == "GET":
-        print(request.GET['dealerId'])
-        dealerId = request.GET['dealerId']
-        context = get_dealer_by_id_from_cf(dealerId=int(dealerId))
-        print(context)
-        return render(request, 'djangoapp/dealer_details.html', context)
+        #dealerId = request.GET['dealerId']
+        url = "https://eu-de.functions.appdomain.cloud/api/v1/web/ba16a567-bf8b-4e08-8345-2742a032caf3/djangoapp/get-reviews"
+        reviews = get_dealer_reviews_from_cf(url, dealerId=dealer_id)
+        print(reviews)
+        review_names = ' '.join([review.sentiment for review in reviews])
+        # Return a list of reviewers names
+        return HttpResponse(review_names)
+        #return render(request, 'djangoapp/dealer_details.html', context)
     elif request.method == "POST":
         post_review({
             'dealership': int(request.POST['dealership']),
