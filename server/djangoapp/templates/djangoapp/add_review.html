@@ -8,7 +8,11 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
-
+    <script type="text/javascript">
+        $('.date-own').datepicker({
+           format: 'mm/dd/yyyy'
+         });
+   </script>
 </head>
     <body>
     <!--Add review form here -->
@@ -18,9 +22,21 @@
             <h1>Please edit your review</h1>
             <hr>
             <div class="form-group"> 
-                <label for="review"><b>Review</b></label>
-                <input type="text" class="form-control" placeholder="Review: " name="review" required> <!--Style input with .form-control class -->
-                {% if message %}
+                <label for="review"><b>Enter the review content</b></label>
+                <textarea class="form-control" id="review" name="review" rows="2"placeholder="This is a great car dealer" required></textarea>
+                <label for="purchasecheck">I have purchased a car from this dealer</label>
+                <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck">
+                <br>
+                <label for="car"><b>Select your car (model-make-year)</b></label>
+                <select name="car" id="car" class="form-select" required>
+                    {% for car in cars %}
+                        <option selected value={{car.id}}>{{car.name}}-{{car.carmake.name}}-{{ car.year|date:"Y" }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="purchasedate"><b>Select your purchase date</b></label>
+                <input class="date-own form-control" type="text" placeholder='mm/dd/yyyy' name="purchasedate" id="purchasedate">
+                    {% if message %}
                 <div class="alert alert-warning"> <!--Style the message paragraph with .alert and .alert-warning class -->
                     {{ message }}
                 </div>

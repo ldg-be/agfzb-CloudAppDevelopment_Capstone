@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
-# from .models import related models
+from .models import CarModel
 from .restapis import get_dealers_from_cf, get_dealer_by_id_from_cf, post_review, get_dealer_reviews_from_cf
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -122,7 +122,10 @@ def add_review(request, dealer_id):
     context = {'dealer_id': dealer_id}
     #check if authenticated
     user = request.user
-    print(user)
+    cars = CarModel.objects.filter(dealerid = dealer_id)
+    print(cars)
+    context['cars'] = cars
+
     if not user.is_authenticated:
         print("user is not authenticated")
         return render(request, 'djangoapp/index.html', context)
@@ -136,10 +139,11 @@ def add_review(request, dealer_id):
             'dealership': dealer_id,
             "name": str(user),
             "review": request.POST["review"],
-            "another": "field",
-            "purchase_date": "02/16/2021",
-            "car_make": "Audi",
-            "car_model": "Car",
+            "id": request.POST["car"],
+            "purchase": request.POST["purchasecheck"],
+            "purchase_date": request.POST["purchasedate"],
+            "car_make": "",
+            "car_model": "",
             "car_year": 2021
         }
         review["time"] = datetime.utcnow().isoformat()
