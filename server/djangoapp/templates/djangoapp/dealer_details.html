@@ -12,7 +12,18 @@
     <!--Add a nav bar here -->
 
     <!-- Add reviews as cards -->
-        {{context}}
+        <div class="container-fluid">
+            <h2>{{ reviews.dealership }}</h2>
+            <div class="card-columns-vertical">
+                {% for review in reviews %}
+                    <div class="card mt-1">
+                        <div class="card-header"><h5>Review {{review.order|add:1}}: {{review.name}}</h5></div>
+                        <div class="card-body">{{review.review}}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>    
+       
     </body>
 
 </html>
