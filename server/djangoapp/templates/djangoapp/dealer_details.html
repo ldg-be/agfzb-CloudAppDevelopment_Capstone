@@ -2,14 +2,25 @@
 
 {% block content %}
 
+    {% if user.is_authenticated %}
+    <button  type="button" class="btn btn-primary" onclick="window.location.href='{% url 'djangoapp:add_review' dealership %}';">Add a Review</button>
+
+    {% endif %}
+
     <!-- Add reviews as cards -->
         <div class="container-fluid">
             <h2>{{ dealership }}</h2>
             <div class="card-columns-vertical">
                 {% for review in reviews %}
-                    <div class="card mt-1">
-                        <div class="card-header"><h5>Review {{review.order|add:1}}: {{review.name}}</h5></div>
-                        <div class="card-body">{{review.review}}</div>
+                    <div class="card mt-1" style="width: 33%;">
+                        <div class="card-header"><img class="card-img-left" style='width:10%;' alt="No sentiment" src="{{MEDIA_URL}}/emoji/{{review.sentiment}}.png"></div>
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">{{review.car_make}}</h5>
+                            <h5 class="card-title"> {{review.car_model}}</h5>
+                            <h5 class="card-title">{{review.purchase_date}}</h5>
+                            <p class="card-text">{{review.review}}</p>
+                        </div>
                     </div>
                 {% endfor %}
             </div>

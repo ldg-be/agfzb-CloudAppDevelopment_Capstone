@@ -1,19 +1,32 @@
 {% extends "djangoapp/navbar.html" %}
 
 {% block content %}
-<h1>Welcome this is the index page</h1>
+<h1>An overview of all dealers</h1>
 
-<div>{{dealerships}}</div>
-<div class="container-fluid">
-            <h2>All Dealerships</h2>
-            <div class="card-columns-vertical">
-                {% for dealership in dealerships %}
-                    <div class="card mt-1">
-                        <div class="card-header"><h5>Dealer {{dealership.order|add:1}}: {{dealership.full_name}}</h5></div>
-                        <div class="card-body">{{dealership.state}}</div>
-                                <div>address,city, full_name, id, lat, long, short_name, st, zip, state</div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>    
+<table class="table" id="table" data-filter-control="true">
+    <thead>
+        <tr>
+            <th data-field="id">ID</th>
+            <th data-field="dealername">Dealer Name</th>
+            <th data-field="city">City</th>
+            <th data-field="address">Address</th>
+            <th data-field="zip">Zip</th>
+            <th data-field="state" data-filter-control="select">State</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dealer in dealerships %}
+            <tr>
+                <td>{{dealer.id}}</td>
+                <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
+                <td>{{dealer.city}}</td>
+                <td>{{dealer.address}}</td>
+                <td>{{dealer.zip}}</td>
+                <td>{{dealer.state}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 {% endblock %}
+
