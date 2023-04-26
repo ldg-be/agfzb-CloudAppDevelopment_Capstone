@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Welcome this is the index page</h1>
-address,city, full_name, id, lat, long, short_name, st, zip, state
+
 <div>{{dealerships}}</div>
 <div class="container-fluid">
             <h2>All Dealerships</h2>
@@ -11,6 +11,7 @@ address,city, full_name, id, lat, long, short_name, st, zip, state
                     <div class="card mt-1">
                         <div class="card-header"><h5>Dealer {{dealership.order|add:1}}: {{dealership.full_name}}</h5></div>
                         <div class="card-body">{{dealership.state}}</div>
+                                <div>address,city, full_name, id, lat, long, short_name, st, zip, state</div>
                     </div>
                 {% endfor %}
             </div>
